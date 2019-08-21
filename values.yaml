@@ -1,0 +1,70 @@
+# Default values for config-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: repo.immport.org:9443/immport/immport-cloud-config-service
+  tag: 1.0.2-SNAPSHOT
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: NodePort
+  port: 8888
+
+containers:
+  port: 8888
+
+springAppName: SPRING_APPLICATION_NAME
+springAppNameVal: immport-cloud-config-service
+springSSL: 
+springSSLVal: "true"
+serverPort:
+serverPortVal: "8888"
+serverContextPath: SERVER_CONTEXT_PATH
+serverContextPathVal: /config
+springCloudConfigServerGitUri: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+springCloudConfigServerGitUriVal: https://bitbucket.org/bisc2012/immport-cloud-config-repo-dev.git
+springCloudConfigServerGitUsername: SPRING_CLOUD_CONFIG_SERVER_GIT_USERNAME
+springCloudConfigServerGitUsernameVal: immport
+springCloudConfigServerGitPassword: SPRING_CLOUD_CONFIG_SERVER_GIT_PASSWORD
+springCloudConfigServerGitPasswordVal: fortestonly
+encryptionKey: ENCRYPTION_KEY
+encryptionKeyVal: forencryptiononly
+immportAuthAdminUsername: IMMPORT_AUTHENTICATION_ADMIN_USERNAME
+immportAuthAdminUsernameVal: testadmin
+immportAuthAdminPassword: IMMPORT_AUTHENTICATION_ADMIN_PASSWORD
+immportAuthAdminPasswordVal: Biscadmin2014#
+loggingSpringCloudConfigServer: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG_SERVER
+loggingSpringCloudConfigServerVal: DEBUG
+loggingSpringCloudConfigServerNativeEnvRepo: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_CONFIG_SERVER_NATIVE_ENVIRONMENT_REPOSITORY
+loggingSpringCloudConfigServerNativeEnvRepoVal: WARN
+loggingImmportCloudConfigService: LOGGING_LEVEL_ORG_IMMPORT_CLOUD_CONFIG_SERVICE
+loggingImmportCloudConfigServiceVal: DEBUG
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+

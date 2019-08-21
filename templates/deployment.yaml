@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "config-service.fullname" . }}
+  labels:
+{{ include "config-service.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "config-service.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "config-service.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort : {{ .Values.containers.port }}
+          env:
+          - name: {{ .Values.springAppName }}
+          - value: {{ .Values.springAppNameVal }}
+#          - name: SERVER_SSL_ENABLED
+#          - value: {{ .Values.springSSL }}
+#          - name: SERVER_PORT
+#          - value: {{ .Values.serverPort }}
+          - name: {{ .Values.serverContextPath }}
+          - value: {{ .Values.serverContextPathVal }}
+          - name: {{ .Values.springCloudConfigServerGitUri }}
+          - value: {{ .Values.springCloudConfigServerGitUriVal }}
+          - name: {{ .Values.springCloudConfigServerGitUsername }}
+          - value: {{ .Values.springCloudConfigServerGitUsernameVal }}
+          - name: {{ .Values.springCloudConfigServerGitPassword }}
+          - value: {{ .Values.springCloudConfigServerGitPasswordVal }}
+          - name: {{ .Values.encryptionKey }}
+          - value: {{ .Values.encryptionKeyVal }}
+          - name: {{ .Values.immportAuthAdminUsername }}
+          - value: {{ .Values.immportAuthAdminUsernameVal }}
+          - name:  {{ .Values.immportAuthAdminPassword }}
+          - value: {{ .Values.immportAuthAdminPasswordVal }}
+          - name: {{ .Values.loggingSpringCloudConfigServer }}
+          - value: {{ .Values.loggingSpringCloudConfigServerVal }}
+          - name: {{ .Values.loggingSpringCloudConfigServerNativeEnvRepo }}
+          - value: {{ .Values.loggingSpringCloudConfigServerNativeEnvRepoVal }}
+          - name: {{ .Values.loggingImmportCloudConfigService }}
+          - value: {{ .Values.loggingImmportCloudConfigServiceVal }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      
